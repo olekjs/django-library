@@ -1,0 +1,38 @@
+{% extends "layouts/app.html" %}
+{% block title %}{{ book.title }}{% endblock title %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-6">
+			<div class="jumbotron jumbotron-fluid">
+				<div class="container">
+					<h1 class="display-4">{{ book.title }}</h1>
+					<p>Category: {{ book.category }}</p>
+					<p>Author: {{ book.author }}</p>
+					<p>Isbn: {{ book.isbn }}</p>
+					<p>Edition date: {{ book.edition_date|date:"m-d-Y" }}</p>
+					<p>Number pages: {{ book.number_pages }}</p>
+					<p class="lead">{{ book.description }}</p>
+					<img src="{{ book.photo_link }}">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="jumbotron jumbotron-fluid">
+				<div class="container">
+					<h1 class="display-4">Rent this book</h1>
+					{% if user.is_authenticated %}
+					<form action="show-book" method="post" class="form">
+					    {% csrf_token %}
+					    <div class="form-group mb-2">
+					    	{{ formRent }}
+						</div>
+					    <input type="submit" class="btn btn-secondary btn-block mt-2" value="Rent">
+					</form>
+					{% else %}
+						<p>You must be logged in to rent a book</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

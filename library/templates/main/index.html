@@ -1,0 +1,27 @@
+{% extends "layouts/app.html" %}
+{% block content %}
+	{% if books %}
+		<div class="row">
+			{% for book in books %}
+				<div class="col-md-4 mt-2 mb-2">
+					<div class="card" style="width: 20rem;">
+						<img class="card-img-top" src="{{ book.photo_link }}" alt="Card image cap">
+						<div class="card-body">
+							<h5 class="card-title">{{ book.title }}</h5>
+							<p>Category: {{ book.category }}</p>
+							<p class="card-text">{{ book.description|truncatechars:90 }}</p>
+							<a href="{% url 'show-book' book.id book.slug %}" class="btn btn-secondary">Show this book</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<div class="jumbotron">
+			<h1 class="display-4">Hello, {{ user.username }}!</h1>
+			<p class="lead">We have not added any books yet.</p>
+			<hr class="my-4">
+			<p>Come back later!</p>
+		</div>
+	{% endif %}
+{% endblock content %}
