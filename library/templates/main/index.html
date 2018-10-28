@@ -10,7 +10,7 @@
 							<h5 class="card-title">{{ book.title }}</h5>
 							<p>Category: {{ book.category }}</p>
 							<p class="card-text">{{ book.description|truncatechars:90 }}</p>
-							<a href="{% url 'show-book' book.id book.slug %}" class="btn btn-secondary">Show this book</a>
+							<a href="{% url 'show-book' book.id %}" class="btn btn-secondary">Show this book</a>
 						</div>
 					</div>
 				</div>

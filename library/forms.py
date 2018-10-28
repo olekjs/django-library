@@ -8,5 +8,4 @@ class RentBook(forms.ModelForm):
 		widgets = {
 			'from_date': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'dd-mm-yyyy'}),
 			'to_date': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'dd-mm-yyyy'}),
-
-			}
+		}

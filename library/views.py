@@ -1,31 +1,23 @@
 from django.contrib import messages
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.http import HttpResponse
-from django.views import View
-from .models import Book
+from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Book, Reservation
 from .forms import RentBook
+from django.views.generic import (
+	ListView, 
+	DetailView,
+)
 
-def home(request):
-	context = {
-		'books': Book.objects.all()
-	}
-
-	return render(request, 'main/index.html', context)
+class BookListView(ListView):
+	model = Book
+	template_name = 'main/index.html'
+	context_object_name = 'books'
 
 
-def showBook(request, book_id, slug):
-	if request.method == 'POST':
-		form = RentBook(request.POST)
-		if form.is_valid():
-			return HttpResponseRedirect('asd')
+class BookDetailView(DetailView):
+	model = Book
+	template_name = 'book/show.html'
 
-	context = {
-		'book': getBook(book_id),
-		'formRent': RentBook()
-	}
 
-	return render(request, 'book/show.html', context)
-
-def getBook(id):
-	return Book.objects.filter(id=id).get()
+def rentBook(LoginRequiredMixin):
+	redirect('home-page')

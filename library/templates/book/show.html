@@ -21,12 +21,12 @@
 				<div class="container">
 					<h1 class="display-4">Rent this book</h1>
 					{% if user.is_authenticated %}
-					<form action="show-book" method="post" class="form">
-					    {% csrf_token %}
-					    <div class="form-group mb-2">
-					    	{{ formRent }}
+					<form action="rent-book" method="post" class="form">
+						{% csrf_token %}
+						<div class="form-group mb-2">
+							{{ form }}
 						</div>
-					    <input type="submit" class="btn btn-secondary btn-block mt-2" value="Rent">
+						<input type="submit" class="btn btn-secondary btn-block mt-2" value="Rent">
 					</form>
 					{% else %}
 						<p>You must be logged in to rent a book</p>
