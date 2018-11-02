@@ -27,8 +27,8 @@ class Book(models.Model):
 		return self.title.replace(' ', '-').lower()
 
 class Reservation(models.Model):
-	user       = models.ForeignKey(User, on_delete=models.CASCADE)
-	book       = models.ForeignKey(Book, on_delete=models.CASCADE)
-	from_date  = models.DateTimeField()
-	to_date    = models.DateTimeField()
+	user       = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+	book       = models.ForeignKey(Book, on_delete=models.CASCADE, default=None)
+	from_date  = models.DateField()
+	to_date    = models.DateField()
 	created_at = models.DateTimeField(default=timezone.now)

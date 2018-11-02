@@ -1,12 +1,13 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, Reservation
 from .forms import RentBook
 from django.views.generic import (
 	ListView, 
 	DetailView,
-)
+	FormView,
+)	
 
 class BookListView(ListView):
 	model = Book
@@ -14,10 +15,23 @@ class BookListView(ListView):
 	context_object_name = 'books'
 
 
-class BookDetailView(DetailView):
-	model = Book
-	template_name = 'book/show.html'
+def showBook(request, book_id):
+	book = getBook(book_id)
 
+	if request.method == 'POST':
+		form = RentBook(request.POST, book_id)
+		if form.is_valid():
+			post = form.save(commit=False)
+			post.user = request.user
+			post.book = book
+			post.save()
+			messages.success(request, f'Book has been reserved!')
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+		else:
+			messages.error(request, f'Reservation was unsuccessful. Wrong data')
 
-def rentBook(LoginRequiredMixin):
-	redirect('home-page')
+	form = RentBook()
+	return render(request, 'book/show.html', {'book': book, 'form': form})
+
+def getBook(id):
+	return Book.objects.get(id=id)
