@@ -7,7 +7,9 @@ from django.views.generic import (
 	ListView, 
 	DetailView,
 	FormView,
-)	
+)
+import datetime
+
 
 class BookListView(ListView):
 	model = Book
@@ -19,7 +21,8 @@ def showBook(request, book_id):
 	book = getBook(book_id)
 
 	if request.method == 'POST':
-		form = RentBook(request.POST, book_id)
+		form = RentBook(request.POST)
+		form.setBookInForm(book_id)
 		if form.is_valid():
 			post = form.save(commit=False)
 			post.user = request.user
@@ -31,7 +34,10 @@ def showBook(request, book_id):
 			messages.error(request, f'Reservation was unsuccessful. Wrong data')
 
 	form = RentBook()
-	return render(request, 'book/show.html', {'book': book, 'form': form})
+	reservations = Reservation.objects.filter(book_id=book, from_date__gte=datetime.date.today())
+
+	return render(request, 'book/show.html', {'book': book, 'form': form, 'reservations': reservations})
+
 
 def getBook(id):
 	return Book.objects.get(id=id)

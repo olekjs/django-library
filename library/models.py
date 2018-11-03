@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+import datetime
 
 class Category(models.Model):
 	name = models.CharField(max_length=200)
@@ -13,18 +14,22 @@ class Book(models.Model):
 	isbn         = models.IntegerField()
 	title        = models.CharField(max_length=200)
 	author       = models.CharField(max_length=200)
-	photo_link   = models.CharField(max_length=1000)
+	photo_link   = models.CharField(max_length=300)
 	description  = models.TextField()
 	category     = models.ForeignKey(Category, on_delete=models.CASCADE)
 	number_pages = models.IntegerField()
 	edition_date = models.DateTimeField()
-	is_reserved  = models.CharField(max_length=2, default='no')
 
 	def __str__(self):
 		return self.title
 
 	def slug(self):
 		return self.title.replace(' ', '-').lower()
+
+	def isRent(self):
+		today = datetime.date.today()
+		if Reservation.objects.filter(book=self.id, to_date__gte=today, from_date__lte=today).count() != 0:
+			return True
 
 class Reservation(models.Model):
 	user       = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
