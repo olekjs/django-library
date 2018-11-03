@@ -37,3 +37,6 @@ class Reservation(models.Model):
 	from_date  = models.DateField()
 	to_date    = models.DateField()
 	created_at = models.DateTimeField(default=timezone.now)
+
+	def is_future(self):
+		return self.from_date > datetime.date.today()

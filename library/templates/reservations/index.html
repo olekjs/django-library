@@ -1,0 +1,37 @@
+{% extends "layouts/app.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Reservations list{% endblock title %}
+{% block content %}
+<table class="table table-middle-aligned  table-hover">
+	<thead class="thead-dark">
+		<tr>
+			<th>Book</th>
+			<th>From</th>
+			<th>To</th>
+			<th>Creation date</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for reservation in reservations %}
+			<tr>
+				<td>{{ reservation.book }}</td>
+				<td>{{ reservation.from_date|date:"Y-m-d" }}</td>
+				<td>{{ reservation.to_date|date:"Y-m-d" }}</td>
+				<td>{{ reservation.created_at|date:"Y-m-d" }}</td>
+				<td>
+					{% if reservation.is_future %}
+						<form method="POST">
+							{% csrf_token %}
+							<input type="hidden" name="deleteReservation" value="{{ reservation.id }}">
+							<button type="submit" class="btn btn-secondary btn-sm">Delete reservation</button>
+						</form>
+					{% else %}
+						-
+					{% endif %}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock content %}

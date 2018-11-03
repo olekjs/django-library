@@ -41,3 +41,15 @@ def showBook(request, book_id):
 
 def getBook(id):
 	return Book.objects.get(id=id)
+
+def reservationsList(request):
+
+	if request.method == 'POST':
+		reservation_id = request.POST.get("deleteReservation")
+		Reservation.objects.filter(id=reservation_id).delete()
+		messages.success(request, f'Reservation has been deleted!')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+	else:
+		reservations = Reservation.objects.filter(user=request.user)
+		return render(request, 'reservations/index.html', {'reservations': reservations})
