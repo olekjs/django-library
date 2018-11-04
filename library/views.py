@@ -1,13 +1,12 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, Reservation
+from .models import (
+	Book, 
+	Reservation,
+	Category)
 from .forms import RentBook
-from django.views.generic import (
-	ListView, 
-	DetailView,
-	FormView,
-)
+from django.views.generic import ListView
 import datetime
 
 
@@ -34,7 +33,7 @@ def showBook(request, book_id):
 			messages.error(request, f'Reservation was unsuccessful. Wrong data')
 
 	form = RentBook()
-	reservations = Reservation.objects.filter(book_id=book, from_date__gte=datetime.date.today())
+	reservations = Reservation.objects.filter(book_id=book)
 
 	return render(request, 'book/show.html', {'book': book, 'form': form, 'reservations': reservations})
 
@@ -53,3 +52,11 @@ def reservationsList(request):
 	else:
 		reservations = Reservation.objects.filter(user=request.user)
 		return render(request, 'reservations/index.html', {'reservations': reservations})
+
+def categories(request):
+	categories = Category.objects.all()
+	books = None
+	if request.method == 'POST':
+		books = Book.objects.filter(category_id=request.POST.get("category"))
+
+	return render(request, 'categories/index.html', {'categories': categories, 'books': books})

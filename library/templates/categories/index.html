@@ -1,0 +1,48 @@
+{% extends "layouts/app.html" %}
+{% block title %}Categories{% endblock title %}
+{% block content %}
+	<div class="card">
+		<div class="card-body">
+			<form method="POST">
+				<div class="row">
+					<div class="col-md-10">
+						{% csrf_token %}
+						<label>Select category</label>
+						<select class="form-control" name="category">
+						{% for category in categories %}
+							<option value="{{ category.id }}">{{ category }}</option>
+						{% endfor %}
+						</select>
+					</div>
+					<div>
+						<div class="col-md-2" style="margin-top: 31px;">
+							<button type="submit" class="btn btn-secondary">Find</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	{% if books %}
+		<div class="row">
+			{% for book in books %}
+				<div class="col-md-4 mt-2 mb-2">
+					<div class="card" style="width: 20rem;">
+						<img class="card-img-top" src="{{ book.photo_link }}" alt="Card image cap">
+						<div class="card-body">
+							<h5 class="card-title">{{ book.title }}</h5>
+							<p>Category: {{ book.category }}</p>
+							<p>Status: {% if book.isRent %} Reserved {% else %} Available {% endif %}</p>
+							<p class="card-text">{{ book.description|truncatechars:90 }}</p>
+							<a href="{% url 'show-book' book.id %}" class="btn btn-secondary">Show this book</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<div class="jumbotron mt-2">
+			<p class="lead">Select category to see books.</p>
+		</div>
+	{% endif %}
+{% endblock content %}

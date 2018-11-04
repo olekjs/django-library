@@ -40,3 +40,6 @@ class Reservation(models.Model):
 
 	def is_future(self):
 		return self.from_date > datetime.date.today()
+
+	def is_future_and_active(self):
+		return self.from_date > datetime.date.today() - datetime.timedelta(days=30)

@@ -39,7 +39,9 @@
 					<h1 class="display-4">Reservations</h1>
 					<p class="lead">
 						{% for reservation in reservations %}
-							<p>Reservation From: <strong>{{ reservation.from_date|date:"Y-m-d" }}</strong> To: <strong>{{ reservation.to_date|date:"Y-m-d" }}</strong></p>
+							{% if reservation.is_future_and_active %}
+								<p>Reservation From: <strong>{{ reservation.from_date|date:"Y-m-d" }}</strong> To: <strong>{{ reservation.to_date|date:"Y-m-d" }}</strong></p>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>

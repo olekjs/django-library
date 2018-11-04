@@ -20,7 +20,7 @@
 							<a class="nav-link" href="{% url 'home-page' %}">Home</a>
 						</li>
 						<li class="nav-item active">
-							<a class="nav-link" href="#">Categories</a>
+							<a class="nav-link" href="{% url 'categories' %}">Categories</a>
 						</li>
 						{% if user.is_authenticated %}
 							<li class="nav-item dropdown active">
